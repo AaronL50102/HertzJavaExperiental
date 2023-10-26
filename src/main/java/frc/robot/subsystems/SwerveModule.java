@@ -72,7 +72,7 @@ public class SwerveModule {
     }
 
     public void resetTurnEncoders(){
-        turnEncoder.setPosition(getAbsoluteEncoderAngle());
+        turnEncoder.setPosition(0);
     }
     public void resetDriveEncoders(){
         driveEncoder.setPosition(0);
