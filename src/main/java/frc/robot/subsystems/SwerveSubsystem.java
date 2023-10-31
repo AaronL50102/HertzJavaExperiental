@@ -44,6 +44,9 @@ public class SwerveSubsystem extends SubsystemBase{
 
     private int count = 0;
 
+    private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.SwerveDriveKinematics, new Rotation2d(0));
+    
+
     public SwerveSubsystem(){
         new Thread(() -> {
             try{
@@ -77,6 +80,7 @@ public class SwerveSubsystem extends SubsystemBase{
     }
 
     public void periodic(){
+        odometer.update(getRotation2d(), frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState());
         // count++;
         // if(count >= 100){
         //     resetModules();
@@ -93,7 +97,14 @@ public class SwerveSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("Front Right2", frontRight.getTurnPosition());
         SmartDashboard.putNumber("Back Left2", backLeft.getTurnPosition());
         SmartDashboard.putNumber("Back Right2", backRight.getTurnPosition());
+    }
+    
+    public Pose2d getPose(){
+        return odometer.getPoseMeters();
+    }
 
+    public void resetOdometer(Pose2d pose){
+        odometer.resetPosition(pose, getRotation2d())
     }
 
     public void resetModules(){

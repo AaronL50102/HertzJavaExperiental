@@ -66,6 +66,44 @@ public class RobotContainer {
     new JoystickButton(operator, 5).toggleOnTrue(new ClawCMD(claw));//Button LB
   }
   public Command getAutonomousCommand() {
-    return null;
+    //Trajectory settings
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+      10, //Max speed meters/second
+      5, //Max acceleration meters/second squared
+    ).setKinematics(DriveConstants.kDriveKinematics);
+
+    //Generate trajectory
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0, 0, new Rotation2d(0)), //initial point
+      List.of( //in-between points
+        new Translation2d(0, -1),
+      ),
+      new Pose2d(0, -1, Rotation2d.fromDegrees(0)), //final point
+      trajectoryConfig
+    );
+
+    //PID for trajectory
+    PIDController xPID = new PIDController(0.002, 0, 0);
+    PIDController yPID = new PIDCOntroller(0.002, 0, 0);
+    ProfiledPIDController rotatePID = new ProfiledPIDController(0.05, 0, 0, new TrapezoidProfile.Constraints(10, 5));
+    rotatePID.enableContinuousInput(Math.PI, Math.PI);
+    
+    //Command to follow trajectory
+    SwerveControllerCommand SwerveControllerCommand = new SwerveControllerCommand(
+      trajectory,
+      swerveSubsystem::getPose,
+      DriveConstants.kDriveKinematics,
+      xPID,
+      yPID,
+      rotatePID,
+      swerveSubsystem::setModuleStates,
+      swerveSubsystem
+    );
+
+    return new SequentialCommandGroup(
+      new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
+      swerveControllerCommand,
+      new InstantCommand(() -> swerveSubsystem.stopModules())
+    );
   }
 }
