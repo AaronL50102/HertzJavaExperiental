@@ -24,6 +24,8 @@ public class SwerveModule {
 
     private final PIDController turningPidController;
 
+    private double percentSpeed;
+
     private final CANCoder absoluteEncoder;
 
     public SwerveModule(int driveMotorID, int turnMotorID, boolean driveMotorReversed, boolean turnMotorReversed, int absoluteEncoderID, double TurnkP, double TurnkI, double TurnkD){
@@ -44,6 +46,8 @@ public class SwerveModule {
 
         turningPidController = new PIDController(TurnkP, TurnkI, TurnkD);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
+
+        percentSpeed = 1;
 
         resetTurnEncoders();
         resetDriveEncoders();
@@ -76,6 +80,10 @@ public class SwerveModule {
     }
     public void resetDriveEncoders(){
         driveEncoder.setPosition(0);
+    }
+
+    public void setPercentSpeed(double speed){
+        this.percentSpeed = speed;
     }
 
     public SwerveModuleState getState(){
