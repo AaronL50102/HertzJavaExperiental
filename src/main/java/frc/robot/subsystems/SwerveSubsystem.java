@@ -121,6 +121,12 @@ public class SwerveSubsystem extends SubsystemBase{
         backRight.stop();
     }
 
+    public void setHalfSpeed(double speed){
+        frontLeft.setPercentSpeed(speed);
+        frontRight.setPercentSpeed(speed);
+        backLeft.setPercentSpeed(speed);
+        backRight.setPercentSpeed(speed);
+    }
     
     public void setModuleStates(SwerveModuleState[] states){
         SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveConstants.physicalMaxSpeedMetersPerSecond);
