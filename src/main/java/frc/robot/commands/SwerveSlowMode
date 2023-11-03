@@ -1,0 +1,25 @@
+package frc.robot.subsystems;
+
+import frc.robot.Constants.*;
+import frc.robot.subsystems.*;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+
+public class SwerveSlowMode extends CommandBase{
+  private final swerveSubsystem swerve;
+  private double speed;
+
+  public SwerveSlowMode(swerveSubsystem swerve, double speed){
+    this.swerve = swerve;
+    this.speed = speed;
+  }
+  public void initialize(){}
+
+  public void execute(){
+    swerve.setHalfSpeed(speed);
+  }
+  public void end(boolean interrupted){}
+
+  public boolean isFinished(){
+    return true;
+  }
+}
