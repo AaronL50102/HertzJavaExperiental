@@ -46,6 +46,7 @@ public class RobotContainer {
   private void configureBindings() {
     //Swerve controls
     //new JoystickButton(driver, 1).onTrue(new SwerveZeroHeading(swerveSubsystem));
+    new JoystickButton(driver, 9).onTrue(new SwerveSlowMode(swerveSubsystem, 0.5)).onFalse(new SwerveSlowMode(swerveSubsystem, 1));
 
     //Arm controls
     new JoystickButton(operator, 6).toggleOnTrue(new ArmMode(arm));//RB
